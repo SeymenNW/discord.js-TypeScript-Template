@@ -2,6 +2,8 @@ import { REST, Routes } from 'discord.js';
 import fs from 'node:fs';
 import path from 'node:path';
 
+//Change this based on whether its release or dev
+const isDevelopment:boolean = false;
 const commands: Array<any> = [];
 
 const botToken: string = process.env.BOT_TOKEN ?? '';
@@ -39,10 +41,29 @@ const commandFolders = fs.readdirSync(foldersPath);
 	try {
 		console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
-		const data: any = await rest.put(
-			Routes.applicationGuildCommands(clientId, guildId),
-			{ body: commands },
-		);
+		let data: any;
+
+		if(isDevelopment) {
+			console.log("RUNNING IN DEVELOPMENT MODE");
+			
+			//This is for guild specific (Development).
+			data = await rest.put(
+				Routes.applicationGuildCommands(clientId, guildId),
+				{ body: commands });
+		
+		} else if(!isDevelopment) {
+			console.log("RUNNING IN PRODUCTION MODE");
+
+			//This is to register your commands globally. 
+		data = await rest.put(
+			Routes.applicationCommands(clientId),
+			{ body: commands });
+		
+
+		}
+		
+
+		
 
 		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
 	} catch (error) {
