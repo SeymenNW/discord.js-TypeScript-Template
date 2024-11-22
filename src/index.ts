@@ -3,11 +3,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import type { Command } from './types/Command';
 
-interface Command {
-  data: SlashCommandBuilder;
-  execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
-}
+
 
 const botToken: string = process.env.BOT_TOKEN ?? '';
 const clientId: string = process.env.CLIENT_ID ?? '';
@@ -32,6 +30,7 @@ client.once(Events.ClientReady, (readyClient) => {
 });
 
 client.commands = new Collection<string, Command>();
+client.cooldowns = new Collection<string, string>();
 
 const loadCommands = async () => {
   const foldersPath = path.join(__dirname, 'commands');
@@ -64,7 +63,9 @@ const loadCommands = async () => {
 client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
-  const command = client.commands.get(interaction.commandName);
+  const command:Command = client.commands.get(interaction.commandName);
+  console.log("LOGTest;", command.cooldown);
+  
 
   if (!command) {
     console.warn(`[WARNING] No command found for interaction: ${interaction.commandName}`);
@@ -77,8 +78,13 @@ client.on(Events.InteractionCreate, async (interaction) => {
     console.error(`[ERROR] Error executing command '${interaction.commandName}':`, error);
     await interaction.reply({ content: '[ERROR] There was an error while executing this command.', ephemeral: true });
   }
+
+
+  //Cooldowns will be added soon (enough).
+
 });
 
+//For loading commands and such
 loadCommands().then(() => {
   client.login(botToken).catch((error) => {
     console.error('[ERROR] Failed to log in to Discord:', error);
