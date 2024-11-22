@@ -23,7 +23,37 @@ This template is based on the [official Discord.js Guide](https://discordjs.guid
 
 The goal is to make it seem as seamless as possible for TypeScript.
 
+## Resources
+### Docs / Guides
+-  [Vitest Official Guide](https://vitest.dev/guide/) 
+-  [TypeScript Lang Docs](https://www.typescriptlang.org/docs/)
+-  [Discord.js Docs](https://discord.js.org/docs/packages/discord.js/14.16.3)
+-  [Discord.js Guide](https://discordjs.guide/)
+-  [Drizzle ORM Docs](https://orm.drizzle.team/docs/get-started)
+
+And more.
+
 ### Why Bun? 
 Bun is a fast JavaScript runtime. Not only that, it just seems more modern than working with Node.js. If you've previously worked with Node.js it should be more or less the same, if not easier. A lot of less headaches (In my personal opinion). If you do not like Bun, you can check out [my other project](https://github.com/SeymenNW/TypeScript-Starter-Projects) that aims to make it easier to get started with Node.js applications with TypeScript.
+
+
+
+
+### Scripts
+These scripts are created to ease the development and test process. Some of the scripts are currently not being used, but will be used in the future. Most of the database/drizzle scripts will not work yet.
+
+**build:** `bun build ./src/index.ts --outdir ./build --target bun`  
+**node-build:** `node ./src/index.ts`  
+**deploy-commands:** `bun run ./scripts/deploySlashCommands.ts`  
+**server-dev-watch:** `bun --watch ./src/index.ts`  
+**server-dev:** `bun --hot ./src/index.ts`  
+**run-build:** `bun run ./build/index.js`  
+**debug:** `bun --inspect ./src/index.ts`  
+**test-build:** `bun build --target=bun ./src/index.ts --outdir ./build`  
+**db-pull:** `drizzle-kit introspect:pg`  
+**db-push:** `drizzle-kit push:pg`  
+**db-migrate:** `bun run ./src/drizzle/migrate.ts`  
+**node-run:** `nodemon ./src/index.ts`
+
 
 
