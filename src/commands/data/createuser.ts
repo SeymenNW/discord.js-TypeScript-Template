@@ -1,14 +1,14 @@
-import { AutocompleteInteraction, SlashCommandBuilder } from 'discord.js';
+import { AutocompleteInteraction, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import type { Command } from '../../types/Command';
 
 const userlist: Command = {
     data: new SlashCommandBuilder()
 
-        // Command setup
+        // Command Setup 
         .setName('createuser')
         .setDescription('Lists the users from db')
 
-        // Command Options
+       
         .addStringOption(option => 
             option.setName('name')
                 .setDescription('The name of the user')
@@ -40,28 +40,32 @@ const userlist: Command = {
                 .setRequired(true)
         ) as SlashCommandBuilder,
 
+
+    // Auto Complete Setup    
     async autoComplete(interaction: AutocompleteInteraction) { 
         const focusedOption = interaction.options.getFocused(true);
-        let choices: string[] = [];
+        let choices: stringChoice[] = [];
 
         if (focusedOption.name === 'mail') {
             choices = [
-                'Omar@mycompany.com', 
-                'Youssef@fromkabul.com', 
-                'Ali@mail.com', 
-                'Khaled@fmail.com'
+                { name: "Test Mail (Omar)", value: "Omar@mail.com" },
+                { name: "Test Mail (Youssef)", value: "Youssef@mail.com" },
+                { name: "Test Mail (Ali)", value: "Ali@mail.com" },
+                { name: "Test Mail (Khaled)", value: "Khaled@mail.com" }
             ];
         }
 
+
         const filtered = choices.filter(choice =>
-            choice.toLowerCase().startsWith(focusedOption.value.toLowerCase())
+            choice.name.toLowerCase().startsWith(focusedOption.value.toLowerCase())
         );
 
         await interaction.respond(
-            filtered.map(choice => ({ name: choice, value: choice }))
+            filtered.map(choice => ({ name: choice.name, value: choice.value }))
         );
     },
 
+     // Command Execution / Logic
     async execute(interaction: any) {
         const nameValue = interaction.options.get('name')?.value;
         const ageValue = interaction.options.get('age')?.value;
@@ -72,5 +76,12 @@ const userlist: Command = {
 
     cooldown: 4
 };
+
+
+
+type stringChoice = {
+    name: string,
+    value: string
+}
 
 export default userlist;
