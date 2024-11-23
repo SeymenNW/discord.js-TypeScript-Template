@@ -3,6 +3,16 @@ import type { Command } from './types/Command';
 import loadCommands from './utils/loadCommands';
 import readyEvent from './utils/readyEvent';
 import interactionCreateHandler from './utils/interactionCreateHandler';
+import 'dotenv/config';
+import { drizzle } from 'drizzle-orm/node-postgres';
+
+const db = drizzle({ 
+  connection: { 
+    connectionString: process.env.DATABASE_URL!,
+    ssl: true
+  }
+});
+
 
 //Environment Variables (See example file 'example.env.text')
 const botToken: string = process.env.BOT_TOKEN ?? '';
