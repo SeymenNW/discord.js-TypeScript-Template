@@ -27,7 +27,7 @@ const userlist: Command = {
 		let userList = "Mails: ";
 
 		for (const user of userMail) {
-			userList = userList + " - " + user.mail
+			userList = userList + "\n" + user.mail
 		}
 
 		cmdInteraction.reply(userList);
