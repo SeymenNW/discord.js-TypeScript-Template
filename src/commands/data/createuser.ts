@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { AutocompleteInteraction, SlashCommandBuilder } from 'discord.js';
 import type { Command } from '../../types/Command';
 
 const userlist: Command = {
@@ -36,17 +36,15 @@ const userlist: Command = {
         .addStringOption(option => 
             option.setName('mail')
                 .setDescription('The mail of the user')
-                .setAutocomplete(true) // Enable autocomplete
+                .setAutocomplete(true) 
                 .setRequired(true)
         ) as SlashCommandBuilder,
 
-    // Autocomplete handler
-    async autoComplete(interaction: any) {
-        const focusedOption = interaction.options.getFocused();
+    async autoComplete(interaction: AutocompleteInteraction) { 
+        const focusedOption = interaction.options.getFocused(true);
         let choices: string[] = [];
 
         if (focusedOption.name === 'mail') {
-            // Sample data to simulate dynamic mail options (replace with DB query if needed)
             choices = [
                 'Omar@mycompany.com', 
                 'Youssef@fromkabul.com', 
@@ -55,7 +53,6 @@ const userlist: Command = {
             ];
         }
 
-        // Filter choices based on the focused input
         const filtered = choices.filter(choice =>
             choice.toLowerCase().startsWith(focusedOption.value.toLowerCase())
         );
@@ -65,13 +62,11 @@ const userlist: Command = {
         );
     },
 
-    // Execute the command
     async execute(interaction: any) {
         const nameValue = interaction.options.get('name')?.value;
         const ageValue = interaction.options.get('age')?.value;
         const mailValue = interaction.options.get('mail')?.value;
 
-        // Reply with the chosen data
         await interaction.reply(`You chose: ${nameValue}. He is ${ageValue} years old. \nHis mail is ${mailValue}`);
     },
 
